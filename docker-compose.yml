@@ -1,0 +1,9 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: a4-print-calculator
+    ports:
+      - "3004:80"
+    restart: unless-stopped
