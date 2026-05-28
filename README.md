@@ -20,7 +20,7 @@
     - **1 - 20 tờ**: 500đ (mặc định)
     - **21 - 50 tờ**: 400đ (mặc định)
     - **51 - 99 tờ**: 350đ (mặc định)
-    - **Từ 100 tờ trở lên**: 300đ (mặc định)
+    - **Từ 100 tờ trở lên**: 330đ (mặc định)
   - Các bậc giá có thể chỉnh sửa đơn giá tùy ý ngay tại bảng điều khiển.
   - **Nổi bật bậc giá đang hoạt động**: Tự động tô màu xanh lá (Emerald) nổi bật bậc giá đang được áp dụng tương ứng với tổng số tờ in của đơn hàng giúp người dùng dễ dàng nhận biết.
 
