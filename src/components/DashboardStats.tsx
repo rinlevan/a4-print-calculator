@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { 
-  Coins, 
-  FileText, 
-  Layers, 
-  BookOpen, 
+import {
+  Coins,
+  FileText,
+  Layers,
+  BookOpen,
   Info
 } from 'lucide-react';
 import { usePrintStore, selectTotalPages, selectTotalSheets, selectPrintCost, selectBindingCost, selectGrandTotal, selectTotalBooksCount } from '../store/usePrintStore';
@@ -17,13 +17,13 @@ export function DashboardStats() {
   const grandTotal = usePrintStore(selectGrandTotal);
   const totalBooks = usePrintStore(selectTotalBooksCount);
   const directories = usePrintStore((state) => state.directories);
-  
+
   const totalFiles = directories.reduce((acc, dir) => acc + dir.files.length, 0);
 
   return (
     <div className="space-y-6 w-full">
       {/* Hero Grand Total Card */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -35,8 +35,8 @@ export function DashboardStats() {
         <span className="text-sm font-semibold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
           Thành Tiền Cuối Cùng
         </span>
-        
-        <motion.h1 
+
+        <motion.h1
           key={grandTotal}
           initial={{ scale: 0.95, opacity: 0.8 }}
           animate={{ scale: 1, opacity: 1 }}

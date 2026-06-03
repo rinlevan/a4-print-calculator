@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
-import { 
-  Printer, 
-  FolderPlus, 
-  Trash2, 
-  Sun, 
-  Moon, 
+import {
+  Printer,
+  FolderPlus,
+  Trash2,
+  Sun,
+  Moon,
   AlertTriangle,
   UploadCloud,
   FilePlus,
@@ -35,7 +35,7 @@ const generateId = () => {
 export default function App() {
   const { toggleTheme, isDark } = useTheme();
   const { directories, addDirectories, updateFilePages, updateFileStatus, clearAllData, resetAllToDefault } = usePrintStore();
-  
+
   const grandTotal = usePrintStore(selectGrandTotal);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -101,9 +101,9 @@ export default function App() {
         } catch (docErr: any) {
           updateFilePages(dirId, fileId, 1, false);
           updateFileStatus(
-            dirId, 
-            fileId, 
-            'error', 
+            dirId,
+            fileId,
+            'error',
             docErr.message || 'Không thể tự động đọc file .doc cũ. Vui lòng tự nhập số trang.'
           );
         }
@@ -111,18 +111,18 @@ export default function App() {
         // Unrecognized format
         updateFilePages(dirId, fileId, 1, false);
         updateFileStatus(
-          dirId, 
-          fileId, 
-          'error', 
+          dirId,
+          fileId,
+          'error',
           'Định dạng không hỗ trợ (chỉ nhận PDF, DOCX, DOC).'
         );
       }
     } catch (err: any) {
       updateFilePages(dirId, fileId, 1, false);
       updateFileStatus(
-        dirId, 
-        fileId, 
-        'error', 
+        dirId,
+        fileId,
+        'error',
         err.message || 'Lỗi khi đọc file'
       );
     }
@@ -134,10 +134,10 @@ export default function App() {
 
     const newDirs: DirectoryItem[] = folders.map((folder) => {
       const dirId = generateId();
-      
+
       const files: FileItem[] = folder.files.map((file) => {
         const fileId = generateId();
-        
+
         // Queue the async parser task to run after store updates
         tasks.push(() => parseFilePagesTask(dirId, fileId, file));
 
@@ -164,7 +164,7 @@ export default function App() {
     });
 
     addDirectories(newDirs);
-    
+
     // Execute all queued tasks now that state is updated
     tasks.forEach((task) => task());
   };
@@ -182,7 +182,7 @@ export default function App() {
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.items) {
       const folders = await readDroppedFolders(e.dataTransfer.items);
       if (folders.length > 0) {
@@ -203,7 +203,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 transition-colors duration-300">
-      
+
       {/* Header Bar */}
       <header className="no-print bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800/80 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -235,11 +235,10 @@ export default function App() {
             <button
               onClick={handleResetClick}
               title="Đặt lại toàn bộ ứng dụng (giá tiền, thông tin, dữ liệu) về mặc định"
-              className={`px-3 py-2 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all select-none border cursor-pointer ${
-                confirmReset
-                  ? 'bg-red-500 text-white border-red-400 animate-pulse'
-                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-950 text-zinc-500 dark:text-zinc-450 hover:text-red-500 dark:hover:text-red-450'
-              }`}
+              className={`px-3 py-2 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all select-none border cursor-pointer ${confirmReset
+                ? 'bg-red-500 text-white border-red-400 animate-pulse'
+                : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-950 text-zinc-500 dark:text-zinc-450 hover:text-red-500 dark:hover:text-red-450'
+                }`}
             >
               {confirmReset ? (
                 <>
@@ -258,11 +257,10 @@ export default function App() {
             {directories.length > 0 && (
               <button
                 onClick={handleClearClick}
-                className={`px-3 py-2 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all select-none border cursor-pointer ${
-                  confirmClear
-                    ? 'bg-amber-500 text-white border-amber-400 animate-pulse'
-                    : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-950 text-red-500'
-                }`}
+                className={`px-3 py-2 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all select-none border cursor-pointer ${confirmClear
+                  ? 'bg-amber-500 text-white border-amber-400 animate-pulse'
+                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-950 text-red-500'
+                  }`}
               >
                 {confirmClear ? (
                   <>
@@ -282,14 +280,11 @@ export default function App() {
       </header>
 
       {/* Main App Container */}
-      <main className="no-print flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
-        
-        {/* Left config side panel */}
-        <SidebarConfig />
+      <main className="no-print flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-10">
 
-        {/* Right workspace panel */}
+        {/* Workspace panel (Top) */}
         <div className="flex-grow flex flex-col space-y-6">
-          
+
           {/* Top statistics hero dashboard */}
           <DashboardStats />
 
@@ -319,20 +314,18 @@ export default function App() {
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              className={`flex-grow border-2 border-dashed rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[400px] transition-all bg-white dark:bg-zinc-900/40 ${
-                isDragging
-                  ? 'border-violet-500 bg-violet-50/20 dark:bg-violet-950/10 scale-[0.99] shadow-inner shadow-violet-500/5'
-                  : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-350 dark:hover:border-zinc-750'
-              }`}
+              className={`flex-grow border-2 border-dashed rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[400px] transition-all bg-white dark:bg-zinc-900/40 ${isDragging
+                ? 'border-violet-500 bg-violet-50/20 dark:bg-violet-950/10 scale-[0.99] shadow-inner shadow-violet-500/5'
+                : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-350 dark:hover:border-zinc-750'
+                }`}
             >
-              <div className={`p-4 rounded-2xl mb-4 transition-all ${
-                isDragging 
-                  ? 'bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400 scale-110' 
-                  : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-600'
-              }`}>
+              <div className={`p-4 rounded-2xl mb-4 transition-all ${isDragging
+                ? 'bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400 scale-110'
+                : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-600'
+                }`}>
                 <UploadCloud size={40} className={isDragging ? 'animate-bounce' : ''} />
               </div>
-              
+
               <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-200">
                 Thêm tài liệu để bắt đầu
               </h3>
@@ -368,17 +361,16 @@ export default function App() {
           ) : (
             /* Active Directories Board view */
             <div className="space-y-6 flex-grow flex flex-col justify-between">
-              
+
               {/* Quick Bar to drop or append more files */}
-              <div 
+              <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={`border border-dashed rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 transition-all bg-white dark:bg-zinc-900/40 ${
-                  isDragging
-                    ? 'border-violet-500 bg-violet-50/20 dark:bg-violet-950/10'
-                    : 'border-zinc-200 dark:border-zinc-850 hover:border-zinc-300 dark:hover:border-zinc-750'
-                }`}
+                className={`border border-dashed rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 transition-all bg-white dark:bg-zinc-900/40 ${isDragging
+                  ? 'border-violet-500 bg-violet-50/20 dark:bg-violet-950/10'
+                  : 'border-zinc-200 dark:border-zinc-850 hover:border-zinc-300 dark:hover:border-zinc-750'
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <div className="text-zinc-400 dark:text-zinc-600 bg-zinc-50 dark:bg-zinc-950 p-2 rounded-xl">
@@ -437,6 +429,17 @@ export default function App() {
             </div>
           )}
 
+        </div>
+
+        {/* Divider line between workspace and configuration */}
+        <hr className="border-zinc-200 dark:border-zinc-850 my-4" />
+
+        {/* Configuration panel (Bottom, grid 2x2) */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-black text-zinc-850 dark:text-zinc-100 tracking-tight">
+            Cấu hình & Thiết lập dịch vụ
+          </h2>
+          <SidebarConfig />
         </div>
 
       </main>

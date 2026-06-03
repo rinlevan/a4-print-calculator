@@ -13,8 +13,8 @@ import {
   LayoutTemplate
 } from 'lucide-react';
 import type { DirectoryItem, FileItem } from '../types';
-import { usePrintStore } from '../store/usePrintStore';
-import { formatBytes } from '../lib/utils';
+import { usePrintStore, selectActiveUnitPrice } from '../store/usePrintStore';
+import { formatBytes, formatVND } from '../lib/utils';
 
 interface FolderCardProps {
   directory: DirectoryItem;
@@ -33,8 +33,17 @@ export function FolderCard({ directory }: FolderCardProps) {
   } = usePrintStore();
 
   const totalFiles = directory.files.length;
-  const totalPages = directory.files.reduce((acc, f) => acc + (f.status === 'error' ? 0 : f.pageCount), 0);
-  const totalSheets = directory.files.reduce((acc, f) => acc + f.calculatedSheets, 0);
+  
+  // Base values (for 1 copy of each file)
+  const basePages = directory.files.reduce((acc, f) => acc + (f.status === 'error' ? 0 : f.pageCount), 0);
+  const baseSheets = directory.files.reduce((acc, f) => acc + (f.status === 'error' ? 0 : f.calculatedSheets), 0);
+
+  // Total values (including file-level copies)
+  const totalPages = directory.files.reduce((acc, f) => acc + (f.status === 'error' ? 0 : f.pageCount * (f.copies || 1)), 0);
+  const totalSheets = directory.files.reduce((acc, f) => acc + (f.status === 'error' ? 0 : f.calculatedSheets * (f.copies || 1)), 0);
+
+  const activeUnitPrice = usePrintStore(selectActiveUnitPrice);
+  const folderPrintCost = totalSheets * activeUnitPrice;
 
   // File type helper rendering
   const getFileIcon = (type: FileItem['type']) => {
@@ -71,12 +80,22 @@ export function FolderCard({ directory }: FolderCardProps) {
               {directory.name}
               {isOpen ? <ChevronUp size={16} className="text-zinc-400" /> : <ChevronDown size={16} className="text-zinc-400" />}
             </h3>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-400 dark:text-zinc-500 font-semibold">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-zinc-400 dark:text-zinc-550 font-semibold">
               <span>{totalFiles} file</span>
               <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700"></span>
-              <span>{totalPages} trang</span>
+              <span className="flex items-center gap-1 text-zinc-650 dark:text-zinc-400">
+                <span>{totalPages} trang</span>
+                {(directory.copies || 1) > 1 && <span className="text-[10px] text-zinc-450 dark:text-zinc-600 font-medium">({basePages} × {directory.copies})</span>}
+              </span>
               <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700"></span>
-              <span className="text-violet-600 dark:text-violet-400">{totalSheets} tờ A4</span>
+              <span className="flex items-center gap-1 text-violet-600 dark:text-violet-400">
+                <span>{totalSheets} tờ A4</span>
+                {(directory.copies || 1) > 1 && <span className="text-[10px] text-violet-450 dark:text-violet-500/80 font-medium">({baseSheets} × {directory.copies})</span>}
+              </span>
+              <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700"></span>
+              <span className="text-emerald-600 dark:text-emerald-450 bg-emerald-50/50 dark:bg-emerald-950/20 px-2.5 py-0.5 rounded-md font-bold transition-colors">
+                Tiền in: {formatVND(folderPrintCost)}
+              </span>
             </div>
           </div>
         </div>

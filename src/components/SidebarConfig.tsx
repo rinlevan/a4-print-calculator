@@ -12,7 +12,7 @@ export function SidebarConfig() {
   const totalSheets = usePrintStore(selectTotalSheets);
 
   return (
-    <div className="space-y-6 w-full lg:max-w-sm">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
       {/* Customer Info Section */}
       <div className="bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800 rounded-2xl p-5 shadow-sm space-y-4">
         <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
