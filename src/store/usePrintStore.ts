@@ -29,13 +29,13 @@ interface PrintState {
 }
 
 const DEFAULT_SETTINGS: PrintSettings = {
-  pricePerSheet: 330,
+  pricePerSheet: 300,
   useTieredPricing: true,
   priceTiers: [
     { min: 1, max: 20, price: 500 },
     { min: 21, max: 50, price: 400 },
     { min: 51, max: 99, price: 350 },
-    { min: 100, max: 999999, price: 330 }
+    { min: 100, max: 999999, price: 300 }
   ],
   bindingPrices: {
     thinCover: 2000,
