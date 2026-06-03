@@ -131,42 +131,55 @@ export default function App() {
   // Processes directories of files
   const processUploadedFolders = (folders: { folderName: string; files: File[] }[]) => {
     const tasks: (() => void)[] = [];
+    const newDirs: DirectoryItem[] = [];
 
-    const newDirs: DirectoryItem[] = folders.map((folder) => {
-      const dirId = generateId();
+    folders.forEach((folder) => {
+      // Find if a directory with the same name already exists in the store
+      const existingDir = directories.find(d => d.name === folder.folderName);
+      const dirId = existingDir ? existingDir.id : generateId();
 
-      const files: FileItem[] = folder.files.map((file) => {
+      const files: FileItem[] = [];
+
+      folder.files.forEach((file) => {
+        // Skip duplicate files in the same directory
+        if (existingDir && existingDir.files.some(f => f.name === file.name)) {
+          return;
+        }
+
         const fileId = generateId();
 
-        // Queue the async parser task to run after store updates
+        // Queue the async parser task to run after store updates with the correct dirId
         tasks.push(() => parseFilePagesTask(dirId, fileId, file));
 
-        return {
+        files.push({
           id: fileId,
           name: file.name,
           size: file.size,
           type: getFileType(file.name),
           pageCount: 0,
           calculatedSheets: 0,
-          copies: 1,
+          copies: existingDir ? existingDir.copies : 1,
           sides: 2,
           status: 'loading'
-        };
+        });
       });
 
-      return {
-        id: dirId,
-        name: folder.folderName,
-        printOrientation: 'portrait',
-        copies: 1,
-        files
-      };
+      if (files.length > 0) {
+        newDirs.push({
+          id: dirId,
+          name: folder.folderName,
+          printOrientation: existingDir ? existingDir.printOrientation : 'portrait',
+          copies: existingDir ? existingDir.copies : 1,
+          files
+        });
+      }
     });
 
-    addDirectories(newDirs);
-
-    // Execute all queued tasks now that state is updated
-    tasks.forEach((task) => task());
+    if (newDirs.length > 0) {
+      addDirectories(newDirs);
+      // Execute all queued tasks now that state is updated
+      tasks.forEach((task) => task());
+    }
   };
 
   // Drag and drop handlers

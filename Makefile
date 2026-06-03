@@ -30,7 +30,7 @@ clean:
 local-install:
 	npm install
 
-local-dev:
+dev:
 	npm run dev
 
 local-build:
